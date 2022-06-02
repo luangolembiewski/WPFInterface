@@ -17,8 +17,6 @@
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="10"/>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition Width="150"/>
@@ -31,43 +29,39 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="txtId" Grid.Column="1"
-                    materialDesign:HintAssist.Hint="ID"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    VerticalAlignment="Center" 
-                    Width="60"/>
-                <TextBox x:Name="txtDocumento" Grid.Column="3"
+                <TextBox x:Name="txtDocumento" Grid.Column="1"
                     materialDesign:HintAssist.Hint="Documento"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     VerticalAlignment="Center" />
 
-                <TextBox x:Name="txtNome" Grid.Column="5"
+                <TextBox x:Name="txtNome" Grid.Column="3"
                     materialDesign:HintAssist.Hint="Nome"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     VerticalAlignment="Center" />
 
-                <Button x:Name="btnGravar" Grid.Column="7" Click="btnGravar_Click"
-                    Style="{StaticResource MaterialDesignPaperLightButton}"
+                <Button x:Name="btnGravar" Grid.Column="5" Click="btnGravar_Click"
+                    Style="{StaticResource MaterialDesignRaisedLightButton}"
                     ToolTip="Resource name: MaterialDesignPaperLightButton"
-                    Content="GRAVAR"/>
+                    Content="GRAVAR" />
+
+                <Button x:Name="btnDeletar" Grid.Column="7" Click="btnDeletar_Click"
+                    Style="{StaticResource MaterialDesignRaisedLightButton}"
+                    ToolTip="Resource name: MaterialDesignPaperLightButton"
+                    Content="EXCLUIR" />
 
                 <Button x:Name="btnListar" Grid.Column="9" Click="btnListar_Click"
-                    Style="{StaticResource MaterialDesignPaperLightButton}"
+                    Style="{StaticResource MaterialDesignRaisedLightButton}"
                     ToolTip="Resource name: MaterialDesignPaperLightButton"
-                    Content="LISTAR"/> 
-                <Button x:Name="btnDeletar" Grid.Column="11" Click="btnDeletar_Click"
-                    Style="{StaticResource MaterialDesignPaperLightButton}"
-                    ToolTip="Resource name: MaterialDesignPaperLightButton"
-                    Content="DELETAR"/>
+                    Content="LISTAR" />
             </Grid>
-
-
-            <DataGrid x:Name="dbgClientes" Grid.Row="1" AutoGenerateColumns="True"
-                ItemsSource="{Binding Clientes, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                SelectedItem="{Binding ClienteSelecionado, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                CanUserAddRows="False"
-                SelectionUnit="Cell"
-                SelectionMode="Extended" />
+            <DataGrid Name ="dgClientes" Grid.Row="1"
+             DataContext="{Binding}"    
+             ItemsSource="{Binding Clientes}"
+             SelectedItem="{Binding Cliente}"                    
+             CanUserAddRows="False"
+             IsReadOnly="True"
+             SelectionUnit="FullRow"
+             SelectionMode="Extended" />
         </Grid>
     </Grid>
 </Window>

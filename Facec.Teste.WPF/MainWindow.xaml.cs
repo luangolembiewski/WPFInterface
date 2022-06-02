@@ -26,6 +26,7 @@ namespace Facec.Teste.WPF
     public partial class MainWindow : Window
     {
         public ObservableCollection<Cliente> Clientes { get; private set; } = new ObservableCollection<Cliente>();
+        public Cliente Cliente { get; set; } = new Cliente(string.Empty, string.Empty);
         public Cliente ClienteSelecionado { get; set; } = new Cliente();
 
         public MainWindow()
@@ -56,13 +57,14 @@ namespace Facec.Teste.WPF
 
                     var response = client.PostAsync("clientes", conteudo).Result;
 
+
                     if (!response.IsSuccessStatusCode)
                     {
                         MessageBox.Show($"Erro ao gravar cliente!" +
-                            $"\n {response.Content.ReadAsStringAsync().Result}");
+                            $"\n Causa: {response.Content.ReadAsStringAsync().Result}");
                         return;
                     }
-
+                    btnListar_Click(sender, e);
                     MessageBox.Show("Sucesso ao gravar cliente!");
                 }
             }
@@ -70,7 +72,7 @@ namespace Facec.Teste.WPF
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
         private void btnDeletar_Click(object sender, RoutedEventArgs e)
         {
@@ -83,26 +85,24 @@ namespace Facec.Teste.WPF
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.Timeout = TimeSpan.FromSeconds(10);
 
-                    var json = new JavaScriptSerializer().Serialize(new Cliente(txtDocumento.Text, txtNome.Text));
-                    var conteudo = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    var response = client.DeleteAsync("clientes").Result;
+
+                    var response = client.DeleteAsync($"clientes/{Cliente.Id}").Result;
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show($"Erro ao deletar cliente!" +
-                            $"\n {response.Content.ReadAsStringAsync().Result}");
+                        MessageBox.Show($"Erro ao Excluir cliente!" +
+                            $"\n Causa: {response.Content.ReadAsStringAsync().Result}");
                         return;
                     }
-
-                    MessageBox.Show("Sucesso ao deletar cliente!");
+                    btnListar_Click(sender, e);
+                    MessageBox.Show("Sucesso ao Excluir cliente!");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
         private void btnListar_Click(object sender, RoutedEventArgs e)
         {
@@ -114,24 +114,18 @@ namespace Facec.Teste.WPF
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.Timeout = TimeSpan.FromSeconds(10);
-
                     var response = client.GetAsync("clientes").Result;
+
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show($"Erro ao listar cliente(s)!" +
-                            $"\n {response.Content.ReadAsStringAsync().Result}");
+                        MessageBox.Show($"Erro ao listar clientes!" +
+                            $"\n Causa: {response.Content.ReadAsStringAsync().Result}");
                         return;
                     }
-
-
-                    
-                    Clientes.Clear();
-                    Clientes = new JavaScriptSerializer().Deserialize<ObservableCollection<Cliente>>(response.Content.ReadAsStringAsync().Result);
-
-                    dbgClientes.ItemsSource = Clientes;
-
-                    MessageBox.Show("Sucesso ao listar cliente(s)!");
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    Clientes = new JavaScriptSerializer().Deserialize<ObservableCollection<Cliente>>(result);
+                    SetDataContext();
                 }
             }
             catch (Exception ex)

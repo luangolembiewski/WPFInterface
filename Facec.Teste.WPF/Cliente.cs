@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Facec.Teste.WPF
 {
@@ -6,19 +7,29 @@ namespace Facec.Teste.WPF
     {
 
         [JsonPropertyName("id")]
-        public int id { get; set; } = 0;
+        public Guid Id { get; set; }
 
         [JsonPropertyName("documento")]
-        public string Documento { get; set; } = string.Empty;
+        public string Documento { get; set; }
 
         [JsonPropertyName("nome")]
-        public string Nome { get; set; } = string.Empty;
+        public string Nome { get; set; }
 
-        public Cliente() { }
-
-        public Cliente(int id, string documento, string nome)
+        public Cliente()
         {
-            id = id;
+
+        }
+
+        public Cliente(string documento, string nome)
+        {
+
+            Documento = documento;
+            Nome = nome;
+        }
+        [JsonConstructor]
+        public Cliente(Guid id, string documento, string nome)
+        {
+            Id = id;
             Documento = documento;
             Nome = nome;
         }
